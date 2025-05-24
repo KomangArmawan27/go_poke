@@ -19,13 +19,12 @@ func ConnectDatabase() {
 
 	// Get database credentials from .env
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
-		GetEnv("DB_HOST"),
-		GetEnv("DB_USER"),
-		GetEnv("DB_PASSWORD"),
-		GetEnv("DB_NAME"),
-		GetEnv("DB_PORT"),
-		GetEnv("DB_SSLMODE"),
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		GetEnv("PGHOST"),
+		GetEnv("PGUSER"),
+		GetEnv("PGPASSWORD"),
+		GetEnv("PGDATABASE"),
+		GetEnv("PGPORT"),
 	)
 
 	// Open connection
