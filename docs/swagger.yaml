@@ -1,0 +1,358 @@
+basePath: /api/v1
+definitions:
+  dto.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        minLength: 3
+        type: string
+      password:
+        minLength: 6
+        type: string
+      role:
+        enum:
+        - admin
+        - user
+        - manager
+        type: string
+    required:
+    - email
+    - name
+    - password
+    - role
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        minLength: 3
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  dto.TimeJSON:
+    properties:
+      time.Time:
+        type: string
+    type: object
+  dto.Token:
+    properties:
+      activeUntil:
+        $ref: '#/definitions/dto.TimeJSON'
+      email:
+        type: string
+      token:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        minLength: 3
+        type: string
+      role:
+        enum:
+        - admin
+        - user
+        - manager
+        type: string
+    type: object
+  utils.BaseResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: komangdamai3@gmail.com
+    name: Komang Damai
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  title: PokeAPI
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates user and returns JWT token
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      summary: User Login
+      tags:
+      - OAuth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register new user for member
+      parameters:
+      - description: Create user credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "409":
+          description: User email already used
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "500":
+          description: Failed to hash password
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      summary: Register new user
+      tags:
+      - OAuth
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get list of users by ID
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "401":
+          description: Missing or invalid token
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "403":
+          description: Forbidden access
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user by id
+      tags:
+      - Users
+  /user/create:
+    post:
+      consumes:
+      - application/json
+      description: Creating new user with role
+      parameters:
+      - description: Create user credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "401":
+          description: Missing or invalid token
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "403":
+          description: Forbidden access
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "409":
+          description: User email already used
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "500":
+          description: Failed to hash password
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      security:
+      - BearerAuth: []
+      summary: Create new user
+      tags:
+      - Users
+  /user/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user by id
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "401":
+          description: Missing or invalid token
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "403":
+          description: Forbidden access
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "404":
+          description: Users not found
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete user
+      tags:
+      - Users
+  /user/update:
+    put:
+      consumes:
+      - application/json
+      description: Update user by id
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: integer
+      - description: Update user credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "401":
+          description: Missing or invalid token
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "403":
+          description: Forbidden access
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "404":
+          description: Users not found
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      security:
+      - BearerAuth: []
+      summary: Update user
+      tags:
+      - Users
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get list of users with filters
+      parameters:
+      - description: Name filter
+        in: query
+        name: name
+        type: string
+      - description: Email filter
+        in: query
+        name: email
+        type: string
+      - description: Role filter
+        in: query
+        name: role
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "401":
+          description: Missing or invalid token
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "403":
+          description: Forbidden access
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "404":
+          description: Users not found
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all users
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and your token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
