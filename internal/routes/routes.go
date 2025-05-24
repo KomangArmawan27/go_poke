@@ -25,8 +25,8 @@ func SetupRoutes() *gin.Engine {
 	r.Use(middleware.LoggerMiddleware())
 
 	// Public route (Login, Register)
-	r.POST("/login", handlers.LoginHandler)
-	r.POST("/register", handlers.RegisterHandler)
+	r.POST("/api/v1/login", handlers.LoginHandler)
+	r.POST("/api/v1/register", handlers.RegisterHandler)
 
 	// Protected routes
 	protected := r.Group("/api/v1")
