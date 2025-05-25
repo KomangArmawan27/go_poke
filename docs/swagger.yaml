@@ -1,5 +1,19 @@
 basePath: /api/v1
 definitions:
+  dto.CreateFavoritePokemonRequest:
+    properties:
+      name:
+        type: string
+      notes:
+        maxLength: 30
+        type: string
+      sprite:
+        type: string
+      type:
+        type: string
+    required:
+    - notes
+    type: object
   dto.CreateUserRequest:
     properties:
       email:
@@ -59,6 +73,18 @@ definitions:
         type: string
       username:
         type: string
+    type: object
+  dto.UpdateFavoritePokemonRequest:
+    properties:
+      name:
+        type: string
+      notes:
+        maxLength: 30
+        type: string
+      type:
+        type: string
+    required:
+    - notes
     type: object
   dto.UpdateUserRequest:
     properties:
@@ -121,6 +147,216 @@ paths:
       summary: User Login
       tags:
       - OAuth
+  /pokemon:
+    get:
+      consumes:
+      - application/json
+      description: Get list of pokemons by ID
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "401":
+          description: Missing or invalid token
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "403":
+          description: Forbidden access
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "404":
+          description: Pokemon not found
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      security:
+      - BearerAuth: []
+      summary: Get pokemon by id
+      tags:
+      - Pokemons
+  /pokemon/create:
+    post:
+      consumes:
+      - application/json
+      description: Creating new pokemon with role
+      parameters:
+      - description: Create pokemon credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateFavoritePokemonRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "401":
+          description: Missing or invalid token
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "403":
+          description: Forbidden access
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "409":
+          description: Pokemon email already used
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "500":
+          description: Failed to hash password
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      security:
+      - BearerAuth: []
+      summary: Create new pokemon
+      tags:
+      - Pokemons
+  /pokemon/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete pokemon by id
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "401":
+          description: Missing or invalid token
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "403":
+          description: Forbidden access
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "404":
+          description: Pokemons not found
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete pokemon
+      tags:
+      - Pokemons
+  /pokemon/update:
+    put:
+      consumes:
+      - application/json
+      description: Update pokemon by id
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: integer
+      - description: Update pokemon credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateFavoritePokemonRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "401":
+          description: Missing or invalid token
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "403":
+          description: Forbidden access
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "404":
+          description: Pokemons not found
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      security:
+      - BearerAuth: []
+      summary: Update pokemon
+      tags:
+      - Pokemons
+  /pokemons:
+    get:
+      consumes:
+      - application/json
+      description: Get list of pokemons with filters
+      parameters:
+      - description: Filter by name
+        in: query
+        name: name
+        type: string
+      - description: Filter by type
+        in: query
+        name: type
+        type: string
+      - description: Filter by notes
+        in: query
+        name: notes
+        type: string
+      - description: Sort by field (name, type, notes)
+        in: query
+        name: sort_by
+        type: string
+      - description: Sort order (asc or desc), default is asc
+        in: query
+        name: order
+        type: string
+      - description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "401":
+          description: Missing or invalid token
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "403":
+          description: Forbidden access
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+        "404":
+          description: Pokemons not found
+          schema:
+            $ref: '#/definitions/utils.BaseResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all pokemons
+      tags:
+      - Pokemons
   /register:
     post:
       consumes:
@@ -325,6 +561,14 @@ paths:
         in: query
         name: role
         type: string
+      - description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:

@@ -23,6 +23,8 @@ import (
 // @Param        name   query     string  false  "Name filter"
 // @Param        email  query     string  false  "Email filter"
 // @Param        role   query     string  false  "Role filter"
+// @Param        page     query     int     false  "Page number for pagination"
+// @Param        limit    query     int     false  "Number of items per page"
 // @Success      200    {object}  utils.BaseResponse
 // @Failure      401    {object}  utils.BaseResponse  "Missing or invalid token"
 // @Failure      403    {object}  utils.BaseResponse  "Forbidden access"

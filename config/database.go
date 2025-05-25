@@ -37,7 +37,7 @@ func ConnectDatabase() {
 
 	// Auto Migrate Models
 	DB.AutoMigrate(&models.User{})
-	DB.AutoMigrate(&models.Product{})
+	DB.AutoMigrate(&models.Pokemon{})
 	DB.AutoMigrate(&models.Log{})
 
 	fmt.Println("✅ Successfully connected to the database!")

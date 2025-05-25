@@ -46,13 +46,13 @@ func SetupRoutes() *gin.Engine {
 	admin.POST("/user/create", handlers.CreateUser)
 	admin.PUT("/user/update", handlers.UpdateUser)
 	admin.DELETE("/user/delete", handlers.DeleteUser)
-
-	// Product routes
-	protected.GET("/products", handlers.GetProducts)
-	protected.GET("/product", handlers.GetProductByID)
-	manager.POST("/product/create", handlers.CreateProduct)
-	manager.PUT("/product/update", handlers.UpdateProduct)
-	manager.DELETE("/product/delete", handlers.DeleteProduct)
+	
+	// Pokemon routes
+	protected.GET("/pokemons", handlers.GetPokemons)
+	protected.GET("/pokemon", handlers.GetPokemonByID)
+	protected.POST("/pokemon/create", handlers.CreatePokemon)
+	protected.PUT("/pokemon/update", handlers.UpdatePokemon)
+	protected.DELETE("/pokemon/delete", handlers.DeletePokemon)
 
 	return r
 }
