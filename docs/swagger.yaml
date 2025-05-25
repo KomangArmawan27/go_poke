@@ -11,8 +11,11 @@ definitions:
         type: string
       type:
         type: string
+      userEmail:
+        type: string
     required:
     - notes
+    - userEmail
     type: object
   dto.CreateUserRequest:
     properties:
@@ -305,6 +308,10 @@ paths:
       - application/json
       description: Get list of pokemons with filters
       parameters:
+      - description: Filter by user_email
+        in: query
+        name: user_email
+        type: string
       - description: Filter by name
         in: query
         name: name

@@ -316,6 +316,12 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Filter by user_email",
+                        "name": "user_email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Filter by name",
                         "name": "name",
                         "in": "query"
@@ -760,7 +766,8 @@
         "dto.CreateFavoritePokemonRequest": {
             "type": "object",
             "required": [
-                "notes"
+                "notes",
+                "userEmail"
             ],
             "properties": {
                 "name": {
@@ -774,6 +781,9 @@
                     "type": "string"
                 },
                 "type": {
+                    "type": "string"
+                },
+                "userEmail": {
                     "type": "string"
                 }
             }

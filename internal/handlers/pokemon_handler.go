@@ -21,6 +21,7 @@ import (
 // @Accept       json
 // @Produce      json
 // @Security     BearerAuth
+// @Param        user_email     query     string  false  "Filter by user_email"
 // @Param        name     query     string  false  "Filter by name"
 // @Param        type     query     string  false  "Filter by type"
 // @Param        notes    query     string  false  "Filter by notes"
@@ -42,6 +43,7 @@ func GetPokemons(c *gin.Context) {
 
 	// hanlde filter
 	allowedField := map[string]string{
+		"user_email":  "string",
 		"name":  "string",
 		"type": "string",
 		"notes":  "string",
@@ -157,6 +159,7 @@ func CreatePokemon(c *gin.Context) {
 		Type: req.Type,
 		Notes:  req.Notes,
 		Sprite:  req.Sprite,
+		UserEmail:  req.UserEmail,
 	}
 
 	// save the pokemon

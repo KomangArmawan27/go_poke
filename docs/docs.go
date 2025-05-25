@@ -323,6 +323,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Filter by user_email",
+                        "name": "user_email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Filter by name",
                         "name": "name",
                         "in": "query"
@@ -767,7 +773,8 @@ const docTemplate = `{
         "dto.CreateFavoritePokemonRequest": {
             "type": "object",
             "required": [
-                "notes"
+                "notes",
+                "userEmail"
             ],
             "properties": {
                 "name": {
@@ -781,6 +788,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
+                    "type": "string"
+                },
+                "userEmail": {
                     "type": "string"
                 }
             }
